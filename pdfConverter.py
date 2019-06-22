@@ -23,7 +23,6 @@ def convert_jpeg_to_pdf(file_paths):
             file_name_with_extension = f'{os.path.  splitext(file_name)[0]}.pdf'
             print(file_name)
             print(file_name_with_extension)
-            sleep(5)
             with open(file_name_with_extension, "wb") as pdf:
                 print(file_path)
                 pdf.write(img2pdf.convert(file_path))
