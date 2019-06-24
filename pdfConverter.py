@@ -2,9 +2,20 @@ import img2pdf
 import os
 import sys
 from time import sleep
-
-
+from PIL import Image
 #Input is a folder output is the same folder but has pdf images instead of 
+def remove_alpha_channel(file_path):
+    try:
+        print(f'Failed to Convert {file_path} to PDF\n Trying to remove the alpha channel')
+        sleep(2)
+        img_alpha = Image.open(file_path)
+        img_alpha.convert('RGB')
+        os.remove(file_path) 
+        img_alpha.save(file_path)
+    except:
+        print(f'Failed to remove alpha channel from {file_path} and therefore didnot convert it to a pdf')
+        sleep(2)
+               
 def get_folder():
     return input("Enter Path To folder:\n")
 def get_list_of_files(path):
@@ -23,14 +34,18 @@ def convert_jpeg_to_pdf(file_paths):
             file_name_with_extension = f'{os.path.  splitext(file_name)[0]}.pdf'
             print(file_name)
             print(file_name_with_extension)
+            #Remove Alpha Channel from all files
+
             with open(file_name_with_extension, "wb") as pdf:
-                print(file_path)
-                pdf.write(img2pdf.convert(file_path))
-                index = index + 1.0
-                percentage = (index / len(file_paths)) * 100
-                print(f'Percentage Complete:%{percentage}')
-                os.remove(file_path)
-                               
+                try:
+                    print(file_path)
+                    pdf.write(img2pdf.convert(file_path))
+                    index = index + 1.0
+                    percentage = (index / len(file_paths)) * 100
+                    print(f'Percentage Complete:%{percentage}')
+                    os.remove(file_path)
+                except:
+                    remove_alpha_channel(file_path)
 def main():
     list_files = get_list_of_files(get_folder())
     print(list_files) 
